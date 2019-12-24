@@ -1,13 +1,17 @@
-
-const { ccclass, property } = cc._decorator;
-
-@ccclass
-export default class UIPool extends cc.Component {
+export default class UIPool {
     //资源存储向 
     //添加缓存引用机制，增设panel打开次数统计 （当超出额定长度范围时  有限释放打开次数少）
 
-    nodeMap = new Map();
-    openCountMap = new Map();
+    private static instance: UIPool;
+
+    public static getInstance(): UIPool {
+        if (this.instance == null)
+            this.instance = new UIPool();
+        return this.instance;
+    }
+
+    nodeMap: Map<string, cc.Node> = new Map();
+    openCountMap: Map<string, number> = new Map();
     maxCount: number = 0;
     curCount: number = 0;
     GCNum: number = 0;
@@ -19,7 +23,8 @@ export default class UIPool extends cc.Component {
      */
     PutPool(params) {
         if (params instanceof cc.Node) {
-            if (!this.nodeMap.has(params)) {
+            params.removeFromParent();
+            if (!this.nodeMap.has(params.name)) {
                 if (this.nodeMap.size > this.maxCount) {
                     this.CompareCallMinToRelease();
                 } else
@@ -43,19 +48,17 @@ export default class UIPool extends cc.Component {
             ++c_Count;
             this.openCountMap.set(params, c_Count);
             return c_node
-        } else {
-            //panel第一次加载时 loadres
-
         }
+        return null
     }
 
     //获取调用次数最少的 node name
     CompareCallMinToRelease() {
         let t_node = null;
 
-        if (this.nodeMap.size > 0) {
+        if (this.openCountMap.size > 0) {
             let count = 100000;
-            this.nodeMap.forEach((value, key) => {
+            this.openCountMap.forEach((value, key) => {
                 if (value < count) {
                     count = value;
                     t_node = key;

@@ -1,10 +1,11 @@
-export interface LOG_TAG {
+export const LOG_TAG = {
     SOCKET: { desc: 'socket', isOpen: true },
     HTTP: { desc: 'http', isOpen: true },
     UIMANAGER: { desc: 'uimanager', isOpen: true },
     UIPOOL: { desc: 'uipool', isOpen: true },
     CONFIG: { desc: 'config', isOpen: true },
     BRIDGE: { desc: 'bridge', isOpen: true },
+    UTILS: { desc: 'utils', isOpen: true }
 }
 
 
@@ -12,14 +13,12 @@ export class Log {
     public static log(tag, ...args) {
         let backLog = console.log || cc.log;
         if (!tag || !tag.isOpen) { return; }
-
         let arr: Array<any> = Array.prototype.slice.call(arguments);
         arr.splice(0, 1, `[${tag.desc}]`);
         let info = Log.stack(2) + Log.getDateString() + " ";
         arr.splice(1, 0, info);
-
         backLog.apply(this, arr)
-    }   
+    }
 
     private static stack(index = 2): string {
         var e = new Error();
