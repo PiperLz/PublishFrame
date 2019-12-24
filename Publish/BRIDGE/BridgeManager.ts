@@ -1,22 +1,5 @@
 
-const {ccclass, property} = cc._decorator;
+export default class BridgeManager {
 
-@ccclass
-export default class BridgeManager extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
-
-    @property
-    text: string = 'hello';
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {}
-
-    start () {
-
-    }
-
-    // update (dt) {}
 }

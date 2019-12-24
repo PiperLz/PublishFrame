@@ -1,22 +1,63 @@
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class UIBase extends cc.Component {
+export default abstract class UIBase extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    private EventList: Map<string, Function[]> = new Map();
 
-    @property
-    text: string = 'hello';
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {}
-
-    start () {
+    onLoad() {
 
     }
 
-    // update (dt) {}
+    start() {
+
+    }
+
+    onDestroy() {
+
+    }
+
+    onEnable() {
+
+    }
+
+    onDisable() {
+
+    }
+
+    public OnInit() {
+
+    }
+
+    public OnHide() {
+
+    }
+
+    public OnShow() {
+
+    }
+
+
+    public OnRegisterEvent(node: cc.Node, eventTag: string, callback: Function, tag) {
+        if (node instanceof cc.Node) {
+            if (!this.EventList.has(node.name + eventTag)) {
+                node.on(eventTag, callback, tag);
+            } else {
+                this.UnRegisterEvent(node, eventTag, tag);
+                console.error(`registerEvent is error :${node.name},'  >>'${eventTag}`)
+            }
+        }
+
+
+    }
+
+    public UnRegisterEvent(node: cc.Node, eventTag: string, tag) {
+        if (this.EventList.has(node.name + eventTag)) {
+            node.off(eventTag);
+            this.EventList.delete(node.name + eventTag);
+        }
+    }
+
+
 }
