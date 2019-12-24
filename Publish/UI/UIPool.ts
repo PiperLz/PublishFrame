@@ -94,7 +94,7 @@ export default class UIPool {
         } else {
             console.log('uiPool empty');
         }
-    },
+    }
 
     ClearPool() {
         if (this.nodeMap.size > 0) {
